@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "Self-reported voter turnout"
+author: "Jiyeon Chang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
