@@ -6,6 +6,24 @@ output:
 # Results
 
 ```{r}
+# df_likert <- df.self %>%
+#   filter(pew_churatd!= 'NA' & pew_religimp != 'NA')
+df_likert <- df.self %>%
+  filter(!is.na(pew_churatd) & !is.na(pew_religimp))
+
+df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very important","Somewhat important", "Not too important","Not at all important"))
+
+ggplot(df_likert) + 
+ geom_bar(aes(x = reorder(pew_churatd,desc(pew_churatd)),fill = reorder(pew_religimp,desc(pew_religimp))), position = 'fill')+
+  ylab('percentage')+
+  xlab('church attendance frequency')+
+  ggtitle('relationship b/w religiosity and church attendance')+
+  coord_flip()+
+  scale_fill_manual(values = c("seashell","lightsalmon1","salmon3","tomato4"))+
+  labs(fill="religion's importance")
+```
+
+```{r}
 self_turnout_state_rmNA<-df.self%>%
   filter(!is.na(turnout_self01))%>%
   group_by(state,year,turnout_self01) %>%
@@ -99,6 +117,7 @@ ggplot(self_turnout_state_rmNA, aes(freq, fct_reorder2(state,year==2012, freq, .
   ggtitle("% of sample claiming to have voted, by state") + ylab("") +
   theme_dotplot
 ```
+
 The cleveland plot of overrporting rates allows us to see the range of over-reporting across states for each year, as well as to identify trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, we can see that there is a pattern over time; over-reporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012.
 
 ```{r}
@@ -108,6 +127,7 @@ ggplot(breakdown.NA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), co
   ggtitle("% of sample with missing values to Q about self-reported turnout", sub = "") + ylab("") +
   theme_dotplot
 ```
+
 This plot shows that the share of respondents with missing values for the self-reported turntout (NA) shows a correlation with state. The green and blue dot roughly suggest that a state with a higher overreporting rate in 2012 also tended to have higher rate in 2016. Notice also the very low NA values for 2008. Many of the states also did not have a single NA, which is indicated by the missing red dot for at state level. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, but that this practice changed in subsequent years. The map and the cleveland plots combined suggest that the state-level information aren't significant predictors of over-reporting. In any case, any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than "cultural" variation in the likelihood that an individual would feel pressured to lie about not having voted. On that note, next we look at some of the demographic and political traits of individuals that may explain over-reporting.
 
 ## Demographic and political traits of respondents
@@ -124,6 +144,7 @@ library(vcd)
 
 mosaic(turnout_self01~gender+educ,data=df.self,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"))
 ```
+
 Those with higher level of education are more likely than others to over-report turnout. While it's possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.
 
 overreporting by strong partisanship and party affiliation
@@ -133,6 +154,7 @@ df3<-df3[df3$pid3 %in% c(1,2),]
 
 mosaic(turnout_self01~pid3+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"))
 ```
+
 Now we look at how overreporting rate differs by party affiliation, and  It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
 
 ## Does the size of our social network predict over-reporting?
@@ -204,23 +226,7 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   theme_dotplot
 ```
 
-```{r}
-# df_likert <- df.self %>%
-#   filter(pew_churatd!= 'NA' & pew_religimp != 'NA')
-df_likert <- df.self %>%
-  filter(!is.na(pew_churatd) & !is.na(pew_religimp))
 
-df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very important","Somewhat important", "Not too important","Not at all important"))
-
-ggplot(df_likert) + 
- geom_bar(aes(x = reorder(pew_churatd,desc(pew_churatd)),fill = reorder(pew_religimp,desc(pew_religimp))), position = 'fill')+
-  ylab('percentage')+
-  xlab('church attendance frequency')+
-  ggtitle('relationship b/w religiosity and church attendance')+
-  coord_flip()+
-  scale_fill_manual(values = c("seashell","lightsalmon1","salmon3","tomato4"))+
-  labs(fill="religion's importance")
-```
 
 - The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
 

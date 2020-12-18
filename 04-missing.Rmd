@@ -24,8 +24,8 @@ library(betareg)
 library(remotes)
 remotes::install_github("cran/extracat")
 
-colSums(is.na(df16)) %>%
-  sort(decreasing= T) 
+# colSums(is.na(df16)) %>%
+#   sort(decreasing= T) 
 
 x<-missing_data.frame(df16)
 image(x)
