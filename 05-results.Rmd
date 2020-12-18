@@ -77,7 +77,7 @@ state_choropleth(df.map12,
 
 state_choropleth(df.map16,
                  title = "2016",
-                 legend = "Percent?")
+                 legend = "Percent")
 
 ```
 For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.

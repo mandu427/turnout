@@ -1,4 +1,5 @@
 # Conclusion
 
-The main limitations of this project--related to the fact that we cannot distinguish between administrative errors and lies--were discussed at the outset. Despite this challenge, it is possible, at least for variables that we 
-Discuss limitations and future directions, lessons learned.
+The main limitations of this project--related to the fact that we cannot distinguish between administrative errors and lies--were discussed at the outset. Despite this challenge, it is possible, at least for variables that I examined, to identify a few patterns that predict over-reporting.
+
+It would be interesting, time permitting, to look at additional political variables, such as margins of the elections, which party won, etc. to see if these electoral outcomes also have an effect on over-reporting. The issue here would be that there electoral outcome would be identical for all those within the administrative unit relevant for the outcome i.e. state, congressional district (CD), so ideally for this analysis we would have additional years of data to allow for state/CD level variation.

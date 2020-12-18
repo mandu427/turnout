@@ -1,4 +1,3 @@
 # Interactive component
 
-text
-new
+link
