@@ -5,6 +5,8 @@ output:
 ---
 # Results
 
+- Note on interpreting what overreporting % means: overreporting rate of 60% means that of the people for whom there is no record of having voted, 60% of them say that they voted.
+
 ```{r}
 self_turnout_state_rmNA<-df.self%>%
   filter(!is.na(turnout_self01))%>%
@@ -100,11 +102,11 @@ theme_dotplot <- theme_bw(14) +
         panel.grid.minor.x = element_blank())
 
 self_turnout_state_rmNA$year<-as.factor(self_turnout_state_rmNA$year)
-ggplot(self_turnout_state_rmNA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), 
+ggplot(self_turnout_state_rmNA, aes(freq*100, fct_reorder2(state,year==2012, freq, .desc=F), 
                             color = year)) +
   geom_point() +
   ggtitle("% of sample claiming to have voted, by state") + ylab("") +
-  theme_dotplot + xlab ("percentage (in decimal)")
+  theme_dotplot + xlab ("%")
 ```
 
 The cleveland plot of overrporting rates allows us to see the range of overreporting across all states for each election year, as well as to capture trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, there does seem to be a temporal pattern; overreporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012. 
@@ -113,9 +115,9 @@ Next we look at the share of missing values to the self-reported turnout questio
 
 ```{r}
 # share of NA's by state
-ggplot(breakdown.NA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), color = year)) +
+ggplot(breakdown.NA, aes(freq*100, fct_reorder2(state,year==2012, freq, .desc=F), color = year)) +
   geom_point() +
-  ggtitle("% of sample with missing values to Q about self-reported turnout", sub = "") + ylab("") + xlab ("percentage (in decimal)")+
+  ggtitle("% of sample with missing values to Q about self-reported turnout", sub = "") + ylab("") + xlab ("%")+
   theme_dotplot
 ```
 
@@ -217,7 +219,7 @@ residence<-df.self%>%
   mutate(freq=n/sum(n)) %>%
   filter(turnout_self01==1)
 
-ggplot(residence, aes(freq, residence)) +
+ggplot(residence, aes(freq*100, residence)) +
   geom_point() +
   ggtitle("% overreporting by length of residence") +
   ylab("") +xlab("%")+
@@ -253,7 +255,7 @@ church.rmNA1<-df.self%>%
   mutate(freq=n/sum(n)) %>%
   filter(turnout_self01==1)
 
-ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
+ggplot(church.rmNA1, aes(freq*100, reorder(pew_churatd,desc(pew_churatd)))) +
   geom_point() +
   ggtitle("% over-reporting by church attendance") +
   ylab("") +xlab("%")+
