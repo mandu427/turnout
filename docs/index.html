@@ -109,9 +109,9 @@
 </div>
 <div id="introduction" class="section level1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>test: modified
-List three questions that you hope you will be able to answer from your research. (It’s ok if these change as your work progresses.)</p>
-<p>I am interested in exploring the phenomenon of over-reporting of turnout in elections in surveys. The main dataset I use to investigate this is the Cooperative Congressional Election Study (<a href="https://cces.gov.harvard.edu/" class="uri">https://cces.gov.harvard.edu/</a>), which asks respondents whether they voted in the recent election. The data includes a variable which indicates whether there is a matching voting record for the respondent. One way to investigate factors that may explain over-reporting is to look at observations for whom there is no record of voting, and see who responded by saying that they did not vote (record matches response) and compare them to those who claim to have voted, even though there is no corresponding record of them having done so. For those who claim to have voted, there are two possible explanations for the missing record. First, it may have been an administrative error. Alternatively, the respondent may not be telling the truth. In this final project, I will see if the share of those who claim to have voted vs. not differ by a number of parameters described below.</p>
+<p>Average turnout in US elections hover around 50-60%, but in surveys, the figure is often closer to 70-80%. Why is that? It’s possible that this gap is attributable to nonresponse, but some point out that there is an element of social desirability bias in the way people respond to survey questions. In other words, there are people who lie about whether they voted, i.e. they say they voted even though in reality they did not. This has been a tricky issue for survey researchers, as you can’t take survey response at face value. In this project, I look at what are some of the variables that can may explain over-reporting pattern.</p>
+<p>The main dataset I use to explore this question is the Cooperative Congressional Election Study (<a href="https://cces.gov.harvard.edu/" class="uri">https://cces.gov.harvard.edu/</a>). The survey asks respondents whether they voted in the recent election. For each respondent, there is a variable indicating whether there exists a record of that person of having voted. So the strategy here is to look at respondents for whom there is <em>no</em> record of voting, and compare the group who said they voted (record does not match what they say) vs. those who say that they did not vote (missing record matches their statement). For those who claim to have voted, there are two possible explanations for why there might not be a corresponding voting record for them. First, it may have been an administrative error–if their address has changed recently, or some other identifying information does not match, it’s possible that the missing record is not an indication that they are lying. Alternatively, the respondent may not be telling the truth. There is not definitive way to distinguish which of the observations are due to error or due to lying. However, if we can assume that the rate of administrative error should be random across different populations, then it <em>is</em> possible to see how share of those who claim to have voted (vs. not) differ across individuals with specific demographic, political or social traits.</p>
+<p>Specifically, I report the result of looking at the following variables:</p>
 <ul>
 <li><ol style="list-style-type: lower-alpha">
 <li>state (proxies political climate)</li>
@@ -120,7 +120,7 @@ List three questions that you hope you will be able to answer from your research
 <li>age; income; race; political affiliation; strength of partisanship (demographic variables)</li>
 </ol></li>
 <li><ol start="3" style="list-style-type: lower-alpha">
-<li>how long Rs have lived at the current address; frequency church attendance (ties to community)</li>
+<li>how long Rs have lived at the current address; frequency of church attendance (ties to community)</li>
 </ol></li>
 <li><ol start="4" style="list-style-type: lower-alpha">
 <li>by election cycle; general election including presidential vs. off yr etc. (election specific variables)</li>

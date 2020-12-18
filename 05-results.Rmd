@@ -213,5 +213,5 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
 - d) by election cycle; general election including presidential vs. off yr etc. (election specific variables)
 - e) turnout; margin of elections (This data will come from the MIT Elections Data) (if time allows)
 ```{r}
-
+df.self$margin
 ```
