@@ -1,6 +1,10 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Results
 
-text 
 ```{r}
 self_turnout_state_rmNA<-df.self%>%
   filter(!is.na(turnout_self01))%>%
