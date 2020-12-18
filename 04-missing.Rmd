@@ -9,7 +9,7 @@ df16<-df.self %>%
          -state_fips,-state_cen,-state_ic,-office,-Rpartyloss,-Rpartywins,-stable_resid_cons,
          -independent_strong,-independent_weak,-margin_003,-margin_002,-margin_001,
          -candidate,-party,-candidatevotes,-totalvotes,-notes,-share,-margin,-y_missing,
-         -birthyr,-lostElection,-lossloss,-newsint_01,-newsint_012,-church1,-overallwin,-stable_resid,
+         -birthyr,-lostElection,-lossloss,-newsint_01,-newsint_012,-church1,-strong_partisan,-overallwin,-stable_resid,
          -overallwin,-year,-vep_highest_office,-version,-party7,-party_lean,-party3,-cd,-county_fips,-writein)
 
 ```
@@ -31,13 +31,13 @@ x<-missing_data.frame(df16)
 image(x)
 
 #x@patterns # commented out due to large data size.
-levels(x@patterns)
+#levels(x@patterns)
 summary(x@patterns)
 
 extracat::visna(df16, sort = "c")
 
 ```
 
-As one can see immediately from the charts, the only variable with a substantial number of missing values is the *turnout_self01*, i.e. self-reported turnout, which is the dependent variable of interest. Out of the 5,783 observations, 916 are missing this value. The variable that has the next highest number of values is *pid7* i.e. political affiliation using 7 scales, with only 9 missing values. Strong_partisanship is a variable that is perfectly aligned in terms of categories as pid7, so it also has 9 missing values. There are 4 additional variables with missing values (newint, residence, faminc) but they are in the single digits and given that these constitute a neglibile share of the sample, it would be easiest to drop these values from the analysis.
+As one can see immediately from the charts, the only variable with a substantial number of missing values is the *turnout_self01*, i.e. self-reported turnout, which is the dependent variable of interest. Out of the 5,783 observations, 916 are missing this value. The variable that has the next highest number of values is *pid7* i.e. political affiliation using 7 scales, with only 9 missing values. There are 4 additional variables with missing values (newint, residence, faminc) but they are in the single digits and given that these constitute a neglibile share of the sample, it would be easiest to drop these values from the analysis.
 
 As for the missing turnout variable, given that this is the dependent variable of interest, I wouldn't feel comfortable imputing the value. As a result, I will drop the NAs by default in all illustrations unless otherwise indicated.
