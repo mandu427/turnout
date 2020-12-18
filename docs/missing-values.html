@@ -105,12 +105,6 @@
 <div id="missing-values" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
 <p>My dataset is quite large, so for the purpose of visualization, I restrict the analysis to 2016, and assume that the pattern will be similar for years 2012 and 2008. Moreover, I deleted the variables which were derived from other variables, as their missing pattern would be exactly the same. I also deleted variables whose missingness is not meaningful (e.g. variable for additional notes, which is (a) optional and (b) text data).</p>
-<pre><code>## NOTE: In the following pairs of variables, the missingness pattern of the first is a subset of the second.
-##  Please verify whether they are in fact logically distinct variables.
-##      [,1]          [,2]               
-## [1,] &quot;pew_churatd&quot; &quot;church_cont&quot;      
-## [2,] &quot;pew_churatd&quot; &quot;church_cont2_freq&quot;
-## [3,] &quot;church_cont&quot; &quot;church_cont2_freq&quot;</code></pre>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
 <p>As one can see immediately from the charts, the only variable with a substantial number of missing values is the <em>turnout_self01</em>, i.e. self-reported turnout, which is the dependent variable of interest. The other variables with some missing data constitute such a small share of the sample that their aggregate measure barely appear on the plot. Given their negligible share, it would be easiest to drop these values from the analysis.</p>
 <p>As for the missing turnout variable, given that this is the dependent variable of interest, I wouldn’t feel comfortable imputing the value. As a result, I will drop the NAs by default in all illustrations unless otherwise indicated.</p>
