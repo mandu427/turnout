@@ -184,7 +184,6 @@ Now we look at how overreporting rate differs by gender and party affiliation.
 What is noticeable is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is even lower for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
 
 ```{r}
-
 df3<-df3[df3$pid3 %in% c(1,2),]
 df3$party<-ifelse(df3$party==1,"Democrat","Republican")
 mosaic(selfreported_turnout~party+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by party and partisan strength")
@@ -194,7 +193,9 @@ This plot takes into account the strength of partisanship. It shows that while t
 
 ## Does the size of our social network predict over-reporting?
 
-Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to over-report? While there are no perfect measures of social network, two variables included in the CCES stand out: (1) length of residency at current address and (2) frequency of church attendance. There are caveats that we need to take into consideration of course. If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn't mean I have weak ties to my neighbors.  Similarly, many people don't there are people who don't have any religious social network, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I limit the extrapolation I do on the church variable to "church-goers." In other words, whatever conclusion I draw shall be limited to those who would consider going to church at any point vs. those who are not Christians, or would never consider going to church.
+Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to overreport? While there are no perfect measures of social network size in the CCES dataset, two variables can serve as proxies: (1) length of residency at current address and (2) frequency of church attendance. Those who have lived for a long time within a neighborhood would presumably have a larger local network size, i.e. peers who would matter in terms of putting pressure on them to vote. Similarly, those who are regular church attenders would presumably have more ties to other church members, holding friends and colleagues from other sources constant.
+
+There are caveats that we need to take into consideration of course. If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn't mean I have weak ties to my neighbors.  Similarly, many people are not religious and therefore don't have any friends via religion, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I acknowledge that the the findings of the church variable can only be used to make inference about the church going population. In other words, whatever conclusion I draw shall be limited to those who would ever consider going to church, and not be meaningful for understanding the pattern among non-Christians.
 
 ```{r}
 library(ggplot2)
@@ -212,10 +213,12 @@ residence<-df.self%>%
 ggplot(residence, aes(freq, residence)) +
   geom_point() +
   ggtitle("% overreporting by length of residence") +
-  ylab("") +xlab("percentage")+
+  ylab("") +xlab("%")+
   theme(plot.title = element_text(hjust = 0.5))+
   theme_dotplot
 ```
+
+The pattern in the plot is quite clear. The longer one has been at the current address, the more likely they were to overreport. This is a striking result, because it means that the effect of lying offsets the possible effects of administrative errors. As explained earlier, errors are most likely to arise for people whose records have changed recently. This would mean that those who are in the "Less than 1 month" or "7 to 11 months" categories should show higher rates of overreporting, but the plot shows in fact that the opposite is true, supporting the hypothesis that strong local ties can increase the likelihood of lying out of social desirability bias.
 
 ```{r}
 #table(df.self$pew_churatd)
@@ -246,10 +249,12 @@ church.rmNA1<-df.self%>%
 ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   geom_point() +
   ggtitle("% over-reporting by church attendance") +
-  ylab("") +xlab("percentage")+
+  ylab("") +xlab("%")+
   theme(plot.title = element_text(hjust = 0.5))+
   theme_dotplot
 ```
+
+A similar pattern is observed for church attendance. Among those who went to church regularly (more than once a month), overreporting rates are higher. You may be wondering about whether church attendance is really a good proxy. Wouldn't it be possible that those who are more religious also feel more guilty if they didn't manage to vote? And as a result, if asked, wouldn't this pressure make it more likely that they lie? In other words, the source of pressure is not social network size, but religiosity? That would be a valid criticism. I cannot alleviate all doubts, but there are two things to keep in mind in response to that question. First, a level of religiosity strong enough to create guilt would have also motivated individuals to actually go out and vote. We do not know if voter turnout varies by religiosity, and that's not something I can address with the data at hand. What I *can* show, though is how religiosity and church attendance related. The stacked bar chart below illustrate the point.
 
 ```{r}
 # df_likert <- df.self %>%
@@ -261,7 +266,7 @@ df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very import
 
 ggplot(df_likert) + 
  geom_bar(aes(x = reorder(pew_churatd,desc(pew_churatd)),fill = reorder(pew_religimp,desc(pew_religimp))), position = 'fill')+
-  ylab('percentage')+
+  ylab('percent share')+
   xlab('church attendance frequency')+
   ggtitle('relationship b/w religiosity and church attendance')+
   coord_flip()+
@@ -269,9 +274,9 @@ ggplot(df_likert) +
   labs(fill="religion's importance")
 ```
 
-The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
+As expected, religiosity and church attendance is strongly correlated. Note, however, even for those who "Seldom" go to church, over 50 % of them think that religion is either "Very" or "Somewhat" important. To obatin a definitve response on whether church attendance has a differential impact on overreporting *independent* of religiosity would require a statistical analysis that would be a natural next step for this project.
 
-** FYI: I wanted to have the "Very important" appear on the top of the legend, but I couldn't figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.
+** FYI: I wanted to have the "Very important" appear first in the legend, but I couldn't figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.
 
 ```{r,echo=FALSE}
 df.gender<-df.self%>%
