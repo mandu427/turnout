@@ -24,7 +24,7 @@
 <meta name="author" content="Jiyeon Chang" />
 
 
-<meta name="date" content="2020-12-18" />
+<meta name="date" content="2020-12-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -121,32 +121,34 @@
 <h2><span class="header-section-number">5.1</span> Are there state-level variations in over-reporting?</h2>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-3.png" width="672" />
 For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" />
-The cleveland plot of overrporting rates allows us to see the range of over-reporting across states for each year, as well as to identify trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, we can see that there is a pattern over time; over-reporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" />
-This plot shows that the share of respondents with missing values for the self-reported turntout (NA) shows a correlation with state. The green and blue dot roughly suggest that a state with a higher overreporting rate in 2012 also tended to have higher rate in 2016. Notice also the very low NA values for 2008. Many of the states also did not have a single NA, which is indicated by the missing red dot for at state level. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, but that this practice changed in subsequent years. The map and the cleveland plots combined suggest that the state-level information aren’t significant predictors of over-reporting. In any case, any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than “cultural” variation in the likelihood that an individual would feel pressured to lie about not having voted. On that note, next we look at some of the demographic and political traits of individuals that may explain over-reporting.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The cleveland plot of overrporting rates allows us to see the range of over-reporting across states for each year, as well as to identify trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, we can see that there is a pattern over time; over-reporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>This plot shows that the share of respondents with missing values for the self-reported turntout (NA) shows a correlation with state. The green and blue dot roughly suggest that a state with a higher overreporting rate in 2012 also tended to have higher rate in 2016. Notice also the very low NA values for 2008. Many of the states also did not have a single NA, which is indicated by the missing red dot for at state level. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, but that this practice changed in subsequent years. The map and the cleveland plots combined suggest that the state-level information aren’t significant predictors of over-reporting. In any case, any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than “cultural” variation in the likelihood that an individual would feel pressured to lie about not having voted. On that note, next we look at some of the demographic and political traits of individuals that may explain over-reporting.</p>
 </div>
 <div id="demographic-and-political-traits-of-respondents" class="section level2">
 <h2><span class="header-section-number">5.2</span> Demographic and political traits of respondents</h2>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" />
-Those with higher level of education are more likely than others to over-report turnout. While it’s possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Those with higher level of education are more likely than others to over-report turnout. While it’s possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.</p>
 <p>overreporting by strong partisanship and party affiliation
-<img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" />
-Now we look at how overreporting rate differs by party affiliation, and It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were “Unsure” about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn’t matter as much.</p>
+<img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Now we look at how overreporting rate differs by party affiliation, and It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were “Unsure” about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn’t matter as much.</p>
 </div>
 <div id="does-the-size-of-our-social-network-predict-over-reporting" class="section level2">
 <h2><span class="header-section-number">5.3</span> Does the size of our social network predict over-reporting?</h2>
 <p>Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to over-report? While there are no perfect measures of social network, two variables included in the CCES stand out: (1) length of residency at current address and (2) frequency of church attendance. There are caveats that we need to take into consideration of course. If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn’t mean I have weak ties to my neighbors. Similarly, many people don’t there are people who don’t have any religious social network, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I limit the extrapolation I do on the church variable to “church-goers.” In other words, whatever conclusion I draw shall be limited to those who would consider going to church at any point vs. those who are not Christians, or would never consider going to church.</p>
 <pre><code>## 
-##      1 to 2 years     1 to 6 months     2 to 6 months      3 to 4 years 
-##              6262               891              2751              5942 
-##   5 or more years    7 to 11 months Less than 1 month 
-##             23712              2151               524</code></pre>
+##                 1      1 to 2 years                 2     2 to 6 months 
+##               112              4933               891              2751 
+##                 3      3 to 4 years                 4                 5 
+##               471              4648              1329              1294 
+##   5 or more years                 6    7 to 11 months Less than 1 month 
+##             20093              3619              1680               412</code></pre>
 <pre><code>## 
 ## Less than 1 month     1 to 6 months    7 to 11 months      1 to 2 years 
-##               524               891              2151              6262 
+##               412                 0              1680              4933 
 ##      3 to 4 years   5 or more years 
-##              5942             23712</code></pre>
+##              4648             20093</code></pre>
 <pre><code>## [1] &quot;Less than 1 month&quot; &quot;1 to 6 months&quot;     &quot;7 to 11 months&quot;   
 ## [4] &quot;1 to 2 years&quot;      &quot;3 to 4 years&quot;      &quot;5 or more years&quot;</code></pre>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
@@ -160,16 +162,11 @@ Now we look at how overreporting rate differs by party affiliation, and It shows
 <pre><code>## [1] &quot;More than once a week&quot; &quot;Once a week&quot;           &quot;Once or twice a month&quot;
 ## [4] &quot;A few times a year&quot;    &quot;Seldom&quot;                &quot;Never&quot;                
 ## [7] &quot;Don&#39;t know&quot;</code></pre>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-18-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 <ul>
 <li><p>The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.</p></li>
-<li><p>FYI: I wanted to have the “Very important” appear on the top of the legend, but I couldn’t figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kep it as is.</p></li>
-<li><ol start="4" style="list-style-type: lower-alpha">
-<li>by election cycle; general election including presidential vs. off yr etc. (election specific variables)</li>
-</ol></li>
-<li><ol start="5" style="list-style-type: lower-alpha">
-<li>turnout; margin of elections (This data will come from the MIT Elections Data) (if time allows)</li>
-</ol></li>
+<li><p>FYI: I wanted to have the “Very important” appear on the top of the legend, but I couldn’t figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.</p></li>
 </ul>
 
 </div>
