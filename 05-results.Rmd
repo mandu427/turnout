@@ -163,7 +163,8 @@ residence<-df.self%>%
 ggplot(residence, aes(freq, residence)) +
   geom_point() +
   ggtitle("% claiming to have voted, by length of residence") +
-  ylab("") +xlab("percentage share")
+  ylab("") +xlab("percentage share")+
+  theme(plot.title = element_text(hjust = 0.5))
   theme_dotplot
 
 # residence.NA<-df.self%>%
@@ -208,6 +209,7 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   geom_point() +
   ggtitle("% over-reporting by church attendance") +
   ylab("") +xlab("percentage share")+
+  theme(plot.title = element_text(hjust = 0.5))+
   theme_dotplot
 ```
 
@@ -232,4 +234,22 @@ ggplot(df_likert) +
 - The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
 
 ** FYI: I wanted to have the "Very important" appear on the top of the legend, but I couldn't figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.
+
+```{r,echo=FALSE}
+df.gender<-df.self%>%
+  group_by(gender,year,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(turnout_self01==1)
+  
+df.gender$freq
+
+df.gender<-df.self%>%
+  group_by(gender,year,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(turnout_self01==1)
+  
+df.gender$freq
+```
 
