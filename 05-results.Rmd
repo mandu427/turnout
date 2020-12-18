@@ -16,7 +16,7 @@ self_turnout_state_rmNA<-df.self%>%
 
 ```{r, echo=FALSE}
 #data prep
-table(df.self$turnout_self01)
+#table(df.self$turnout_self01)
 
 breakdown<-df.self%>%
   group_by(state,year,turnout_self01) %>%
@@ -30,7 +30,7 @@ breakdown.NA<-df.self%>%
   mutate(freq=n/sum(n)) %>%
   filter(is.na(turnout_self01))
 
-head(breakdown.NA)
+#head(breakdown.NA)
 
 breakdown.NA1<-df.self%>%
   group_by(state,year,turnout_self01) %>%
@@ -80,6 +80,7 @@ state_choropleth(df.map16,
                  legend = "Percent")
 
 ```
+
 For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.
 
 * Ideally I would have adjusted the percentage scale to illustrate regular interval, but wasn't able to fix this.
@@ -125,7 +126,6 @@ mosaic(turnout_self01~gender+educ,data=df.self,direction=c("v","v","h"),highligh
 
 Those with higher level of education are more likely than others to over-report turnout. While it's possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.
 
-overreporting by strong partisanship and party affiliation
 ```{r}
 library(vcd)
 df3<-df.self[,c("strong_partisan","pid3","turnout_self01")]
@@ -231,7 +231,7 @@ ggplot(df_likert) +
   labs(fill="religion's importance")
 ```
 
-- The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
+The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
 
 ** FYI: I wanted to have the "Very important" appear on the top of the legend, but I couldn't figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.
 
@@ -244,12 +244,12 @@ df.gender<-df.self%>%
   
 df.gender$freq
 
-df.gender<-df.self%>%
-  group_by(gender,year,turnout_self01) %>%
+df.race<-df.self%>%
+  group_by(race,year,turnout_self01) %>%
   summarise(n=n())%>%
   mutate(freq=n/sum(n)) %>%
   filter(turnout_self01==1)
   
-df.gender$freq
+df.race
 ```
 
