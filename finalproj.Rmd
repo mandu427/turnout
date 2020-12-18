@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
+test: modified
 List three questions that you hope you will be able to answer from your research. (It's ok if these change as your work progresses.)
 
 
@@ -128,6 +129,7 @@ knitr::opts_chunk$set(
 ```
 # Results
 
+text 
 ```{r}
 self_turnout_state_rmNA<-df.self%>%
   filter(!is.na(turnout_self01))%>%
@@ -350,7 +352,7 @@ knitr::opts_chunk$set(
 ```
 # Interactive component
 
-
+text
 
 <!--chapter:end:06-interactive.Rmd-->
 
@@ -363,6 +365,7 @@ knitr::opts_chunk$set(
 ```
 # Conclusion
 
+hello, simple text
 
 <!--chapter:end:07-conclusion.Rmd-->
 
