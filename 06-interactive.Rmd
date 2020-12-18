@@ -14,4 +14,5 @@ https://vizhub.com/mandu427/268ba661bb3d4f0ba82188fa0a60d689?edit=files&file=ind
 
 The second link produces a similar plot, but for race. Again, I use the maximum y value in each year as the maximum value of the y scale, which makes it easier how the relative differences across racial groups change over time. From these visualizations it's quite easy to see that the over-reporting rate among Asians has increased relative to the share of Whites, from 2008 to 2012, and again in 2016. I don't have an a priori theory about this change, and it's important to note that it's also possible that some of the change is due to sampling, since the number of observations for Asians (e.g. 612 in year 2016) is much smaller than for Whites (9,710 in 2016). However, the change seems to be substantial, and it would be interesting to investigate the reasons behind this.
 
-The code for the interactive visualizations were based on modificatoins of this code: https://www.d3-graph-gallery.com/graph/barplot_button_data_hard.html
+
+The code for the interactive visualizations were based on modifications of this code: https://www.d3-graph-gallery.com/graph/barplot_button_data_hard.html
