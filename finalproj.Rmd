@@ -1,6 +1,133 @@
+--- 
+title: "Self-reported voter turnout"
+author: "Jiyeon Chang"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+List three questions that you hope you will be able to answer from your research. (It's ok if these change as your work progresses.)
+
+
+I am interested in exploring the phenomenon of over-reporting of turnout in elections in surveys. The main dataset I use to investigate this is the Cooperative Congressional Election Study (https://cces.gov.harvard.edu/), which asks respondents whether they voted in the recent election. The data includes a variable which indicates whether there is a matching voting record for the respondent. One way to investigate factors that may explain over-reporting is to look at observations for whom there is no record of voting, and see who responded by saying that they did not vote (record matches response) and compare them to those who claim to have voted, even though there is no corresponding record of them having done so. For those who claim to have voted, there are two possible explanations for the missing record.  First, it may have been an administrative error. Alternatively, the respondent may not be telling the truth. In this final project, I will see if the share of those who claim to have voted vs. not differ by a number of parameters described below.
+
+- a) state (proxies political climate)
+- b) age; income; race; political affiliation; strength of partisanship (demographic variables)
+- c) how long Rs have lived at the current address; frequency church attendance (ties to community)
+- d) by election cycle; general election including presidential vs. off yr etc. (election specific variables)
+- e) turnout; margin of elections (This data will come from the MIT Elections Data) (if time allows)
+
+<!--chapter:end:index.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data sources
+
+The main dataset I use is the Cooperative Congressional Election Study (https://cces.gov.harvard.edu/). CCES is a 50,000+ person national stratified sample survey administered by YouGov on a biannual basis. For the purpose of this project, I look at the 3 most recent presidential elections for which data is available--that is, 2008, 2012 and 2016. The data from 2016, for instance, includes 64,600 observations and 563 variables. However, I look a subset of this sample, namely those for whom there is no voting record. For the 3 years, this reduces the sample to a total of 13,216 observations. A wide range of variables are included in the dataset, including the main demographic variables (age, gender, state/county of residence, race, education, income, etc.) and an extensive list of questions about political affiliation and attitudes, support for specific candidates and opinions about proposed policies, such as climate change, and gun control.
+
+As briefly mentioned above, one of the challenges of using this data is that, for those who claim to have voted (but for whom there is no matching voting record), we won't ever know whether these people are lying or if there's been an administrative error. Literature pertaining to the field identifies a number of factors that may predict higher prob. of admin error, e.g. recent change in residence. There are many variables for which the rate of administrate error should not differ across the response categories, e.g. gender, or religion. This is more a problem with the conceptualization of the question rather than a problem with the quality of data, however, and I will address the limitations in the conclusions one can draw from the visualization that I will produce.
+
+<!--chapter:end:02-data.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Data transformation
+
+- The data has been prepared by merging data from 3 election years, and also merging the CCES data with electoral outcome dataset to create variables accounting for state level turnout and margin of victory. It takes a while to load the data, so I display the code below but don't run it, and the data used for the next section calls it from a csv file I saved in earlier runs. The main steps I undertook involved the following:
+
+- Rename variables from each year to prepare for the merger. A similar set of questions were asked each year but they didn't necessarily have the same variable names.
+- Recode variables with several levels into binary variables where it is helpful: This is done for variables such as church01, which is 1 if the person goes to church at least several times a year and 0 otherwise. (The original variable had more detailed frequencies.) Similar steps were taken to indicate stable_residency01, which is 1 if the person has been residing at current address for >1 year.
+- The electoral outcome at state-year level from the MIT Elections data was merged with the respondent's state-year to create variables indicating how big the margin was in the race they voted, and which party won. These variables make it possible to capture the "political reality" of the electoral unit (state) in which each respondent is voting. Whether this political reality predicts differential rate of overreporting corresponds to item (e) on my list of questions; as mentioned above I'm not sure if I'll have time to get to it but the variables have been merged and created!
+```{r}
+devtools::install_github("hrbrmstr/statebins")
+library(dplyr)
+library(tidyverse)
+df.self<-read.csv("/Users/siyeona/cleaned_data.csv")
+df.self$year<-as.factor(df.self$year)
+```
+
+<!--chapter:end:03-cleaning.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Missing values
+
+My dataset is quite large, so for the purpose of visualization I deleted the variables which were derived from other variables, as their missing pattern would be the same. I also deleted variables whose missingness is not meaningful (e.g. variable for additional notes, which is (a) optional and (b) text data). I also restrict the analysis to year 2016, which still leaves me with 5,783 observations.
+
+```{r}
+df16<-df.self %>%
+  filter(year==2016) %>%
+  select(-X,-case_id,-st,-dist,-pid3,-pid3_leaner,-turnout_selfreport,-state_po,
+         -state_fips,-state_cen,-state_ic,-office,-Rpartyloss,-Rpartywins,-stable_resid_cons,
+         -independent_strong,-independent_weak,-margin_003,-margin_002,-margin_001,
+         -candidate,-party,-candidatevotes,-totalvotes,-notes,-share,-margin,-y_missing,
+         -birthyr,-lostElection,-lossloss,-newsint_01,-newsint_012,-church1,-overallwin,-stable_resid,
+         -overallwin,-year,-vep_highest_office,-version,-party7,-party_lean,-party3,-cd,-county_fips,-writein)
+
+```
+
+```{r}
+#install.packages("mi")
+#install.packages("betareg")
+#install.packages("remotes")
+library(dplyr)
+library(mi)
+library(betareg)
+library(remotes)
+remotes::install_github("cran/extracat")
+
+colSums(is.na(df16)) %>%
+  sort(decreasing= T) 
+
+x<-missing_data.frame(df16)
+image(x)
+
+#x@patterns # commented out due to large data size.
+levels(x@patterns)
+summary(x@patterns)
+
+extracat::visna(df16, sort = "c")
+
+```
+
+As one can see immediately from the charts, the only variable with a substantial number of missing values is the *turnout_self01*, i.e. self-reported turnout, which is the dependent variable of interest. Out of the 5,783 observations, 916 are missing this value. The variable that has the next highest number of values is *pid7* political affiliation using 7 scales, with only 9 missing values. Strong_partisanship is a variable that is perfectly aligned in terms of categories as pid7, so it also has 9 missing values. Again, there are 4 additional variables with missing values (newint, residence, faminc) but they are in the single digits and given that it's a neglibile share relative to the size of the full dataset, it would be easiest to drop these values from the analysis.
+
+As for the missing turnout variable, given that this is the dependent variable of interest, I wouldn't feel comfortable imputing the value. As a result, I will drop the NAs.
+
+<!--chapter:end:04-missing.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
 # Results
 
-text 
 ```{r}
 self_turnout_state_rmNA<-df.self%>%
   filter(!is.na(turnout_self01))%>%
@@ -211,3 +338,31 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
 ```{r}
 
 ```
+
+<!--chapter:end:05-results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Interactive component
+
+
+
+<!--chapter:end:06-interactive.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Conclusion
+
+
+<!--chapter:end:07-conclusion.Rmd-->
+
