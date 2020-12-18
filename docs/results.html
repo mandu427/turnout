@@ -104,23 +104,10 @@
             <section class="normal" id="section-">
 <div id="results" class="section level1">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
-<pre><code>## 
-##     0     1 
-##  9118 27286</code></pre>
-<pre><code>## # A tibble: 6 x 5
-## # Groups:   state, year [6]
-##   state   year  turnout_self01     n   freq
-##   &lt;chr&gt;   &lt;fct&gt;          &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-## 1 Alabama 2012              NA    29 0.125 
-## 2 Alabama 2016              NA    49 0.168 
-## 3 Alaska  2012              NA     2 0.08  
-## 4 Alaska  2016              NA     1 0.0323
-## 5 Arizona 2012              NA    55 0.180 
-## 6 Arizona 2016              NA    94 0.202</code></pre>
 <div id="are-there-state-level-variations-in-over-reporting" class="section level2">
 <h2><span class="header-section-number">5.1</span> Are there state-level variations in over-reporting?</h2>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-3.png" width="672" />
-For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-12-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-2.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-12-3.png" width="672" /></p>
+<p>For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.</p>
 <ul>
 <li>Ideally I would have adjusted the percentage scale to illustrate regular interval, but wasn’t able to fix this.</li>
 </ul>
@@ -133,8 +120,7 @@ For year 2016, it seems that over-reporting rates tended to be higher in coastal
 <h2><span class="header-section-number">5.2</span> Demographic and political traits of respondents</h2>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Those with higher level of education are more likely than others to over-report turnout. While it’s possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.</p>
-<p>overreporting by strong partisanship and party affiliation
-<img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>Now we look at how overreporting rate differs by party affiliation, and It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were “Unsure” about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn’t matter as much.</p>
 </div>
 <div id="does-the-size-of-our-social-network-predict-over-reporting" class="section level2">
@@ -573,10 +559,24 @@ For year 2016, it seems that over-reporting rates tended to be higher in coastal
 ##  - attr(*, &quot;validate&quot;)= logi TRUE</code></pre>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<ul>
-<li>The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.</li>
-</ul>
+<p>The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.</p>
 <p>** FYI: I wanted to have the “Very important” appear on the top of the legend, but I couldn’t figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.</p>
+<pre><code>## [1] 0.5212494 0.5890429 0.6027595 0.7485595 0.6820702 0.7401327</code></pre>
+<pre><code>## # A tibble: 24 x 5
+## # Groups:   race, year [24]
+##    race          year  turnout_self01     n  freq
+##    &lt;chr&gt;         &lt;fct&gt;          &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1 Asian         2008               1    73 0.415
+##  2 Asian         2012               1   180 0.458
+##  3 Asian         2016               1   612 0.544
+##  4 Black         2008               1   327 0.678
+##  5 Black         2012               1   898 0.710
+##  6 Black         2016               1  1558 0.695
+##  7 Hispanic      2008               1   288 0.503
+##  8 Hispanic      2012               1   632 0.543
+##  9 Hispanic      2016               1  1267 0.623
+## 10 MiddleEastern 2008               1     8 0.727
+## # … with 14 more rows</code></pre>
 
 </div>
 </div>
