@@ -13,8 +13,7 @@ The main dataset I use to explore this question is the Cooperative Congressional
 
 Specifically, I report the result of looking at the following variables:
 
-- a) state (proxies political climate)
-- b) age; income; race; political affiliation; strength of partisanship (demographic variables)
-- c) how long Rs have lived at the current address; frequency of church attendance (ties to community)
-- d) by election cycle; general election including presidential vs. off yr etc. (election specific variables)
-- e) turnout; margin of elections (This data will come from the MIT Elections Data) (if time allows)
+- state (proxies political climate)
+- demographic and political traits; race, gender, education, political affiliation and strength of partisanship
+- indicators of social network strengths
+

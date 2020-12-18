@@ -69,11 +69,11 @@ df.map16 <- self_turnout_state16 %>%
 
 state_choropleth(df.map08,
                  title = "2008",
-                 legend = "Percent?")
+                 legend = "Percent")
 
 state_choropleth(df.map12,
                  title = "2012",
-                 legend = "Percent?")
+                 legend = "Percent")
 
 state_choropleth(df.map16,
                  title = "2016",
@@ -81,6 +81,8 @@ state_choropleth(df.map16,
 
 ```
 For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.
+
+* Ideally I would have adjusted the percentage scale to illustrate regular interval, but wasn't able to fix this.
 
 ```{r}
 # cleveland dot plot
@@ -117,24 +119,24 @@ This plot shows that the share of respondents with missing values for the self-r
 ```{r}
 #install.packages("vcd")
 library(vcd)
-### change numbers to actual thins
-# 1 democrat
-# 2 rep 
-# 3 ind
-# 4 other
-# 5 unsure
 
-mosaic(turnout_self01~gender+educ,data=df.self,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"))
+mosaic(turnout_self01~gender+educ,data=df.self,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"),main="over-reporting by gender and education")
 ```
 
 Those with higher level of education are more likely than others to over-report turnout. While it's possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.
 
 overreporting by strong partisanship and party affiliation
 ```{r}
+library(vcd)
 df3<-df.self[,c("strong_partisan","pid3","turnout_self01")]
 df3<-df3[df3$pid3 %in% c(1,2),]
 
-mosaic(turnout_self01~pid3+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"))
+df3$party<-df3$pid3
+df3$selfreported_turnout<-df3$turnout_self01
+df3$selfreported_turnout<-ifelse(df3$selfreported_turnout==1,"Yes","No")
+df3$strong_partisan<-ifelse(df3$strong_partisan==1,"Yes","No")
+df3$party<-ifelse(df3$party==1,"Democrat","Republican")
+mosaic(selfreported_turnout~party+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by party and partisan strength")
 ```
 
 Now we look at how overreporting rate differs by party affiliation, and  It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
@@ -144,12 +146,13 @@ Now we look at how overreporting rate differs by party affiliation, and  It show
 Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to over-report? While there are no perfect measures of social network, two variables included in the CCES stand out: (1) length of residency at current address and (2) frequency of church attendance. There are caveats that we need to take into consideration of course. If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn't mean I have weak ties to my neighbors.  Similarly, many people don't there are people who don't have any religious social network, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I limit the extrapolation I do on the church variable to "church-goers." In other words, whatever conclusion I draw shall be limited to those who would consider going to church at any point vs. those who are not Christians, or would never consider going to church.
 
 ```{r}
-table(df.self$residence)
+library(ggplot2)
+#table(df.self$residence)
 
 df.self$residence<-factor(df.self$residence,levels=c("Less than 1 month","1 to 6 months","7 to 11 months","1 to 2 years", "3 to 4 years","5 or more years"))
 
-table(df.self$residence)
-levels(df.self$residence)
+#table(df.self$residence)
+#levels(df.self$residence)
 
 residence<-df.self%>%
   group_by(residence,turnout_self01) %>%
@@ -159,28 +162,28 @@ residence<-df.self%>%
 
 ggplot(residence, aes(freq, residence)) +
   geom_point() +
-  ggtitle("% claiming to have voted (by length of residence)", sub = "NA is a separate category") +
+  ggtitle("% claiming to have voted, by length of residence") +
   ylab("") +
   theme_dotplot
 
-residence.NA<-df.self%>%
-  group_by(residence,turnout_self01) %>%
-  summarise(n=n())%>%
-  mutate(freq=n/sum(n)) %>%
-  filter(is.na(turnout_self01))
-
-ggplot(residence.NA, aes(freq, reorder(residence, freq))) +
-  geom_point() +
-  ggtitle("% with missing values on self-reported turnout Q (by length of residence)", sub = "i.e. share of NAs") + ylab("") +
-  theme_dotplot
+# residence.NA<-df.self%>%
+#   group_by(residence,turnout_self01) %>%
+#   summarise(n=n())%>%
+#   mutate(freq=n/sum(n)) %>%
+#   filter(is.na(turnout_self01))
+# 
+# ggplot(residence.NA, aes(freq, reorder(residence, freq))) +
+#   geom_point() +
+#   ggtitle("% with missing values on self-reported turnout Q (by length of residence)", sub = "i.e. share of NAs") + ylab("") +
+#   theme_dotplot
 ```
 
 ```{r}
-table(df.self$pew_churatd)
+#table(df.self$pew_churatd)
 
 df.self$pew_churatd<-factor(df.self$pew_churatd,levels=c("More than once a week", "Once a week","Once or twice a month", "A few times a year","Seldom","Never", "Don't know"))
 
-levels(df.self$pew_churatd)
+#levels(df.self$pew_churatd)
 
 # church.NA<-df.self%>%
 #   group_by(pew_churatd,turnout_self01) %>%
@@ -204,7 +207,7 @@ church.rmNA1<-df.self%>%
 ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   geom_point() +
   ggtitle("% over-reporting by church attendance") +
-  ylab("") +
+  ylab("") +xlab("percentage share")
   theme_dotplot
 ```
 

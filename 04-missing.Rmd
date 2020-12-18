@@ -9,7 +9,7 @@ df16<-df.self %>%
          -state_fips,-state_cen,-state_ic,-office,-Rpartyloss,-Rpartywins,-stable_resid_cons,
          -independent_strong,-independent_weak,-margin_003,-margin_002,-margin_001,
          -candidate,-party,-candidatevotes,-totalvotes,-notes,-share,-margin,-y_missing,
-         -birthyr,-lostElection,-lossloss,-newsint_01,-newsint_012,-strong_partisan,-overallwin,-stable_resid, -church_reg, -church_ever,
+         -birthyr,-lostElection,-lossloss,-newsint_01,-newsint_012,-strong_partisan,-overallwin,-stable_resid, -church_reg, -church_ever, -church_cont, -church_cont2_freq,
          -overallwin,-year,-vep_highest_office,-version,-party7,-party_lean,-party3,-cd,-county_fips,-writein)
 
 ```
