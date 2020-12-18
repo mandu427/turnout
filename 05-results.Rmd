@@ -46,6 +46,9 @@ self_turnout_state16<-self_turnout_state_rmNA[self_turnout_state_rmNA$year==2016
 ```
 
 ## Are there state-level variations in over-reporting?
+
+Looking at state-level variations is interesting, first, because if there are any differences in administrative errors, administrative boundaries would be the logical place to look for it. After assuming away errors, however, it's also possible that certain cultural elements captured by states could influence whether overreporting is higher consistently in certain states over another. To see if there are interesting insight, I plot the overreporting rate by state. I visualize these on the map, as it'd be possible to detect if there are any geographic pattern to this phenomenon.
+
 ```{r}
 #install.packages("choroplethrMaps")
 #install.packages("choroplethr")
@@ -81,9 +84,10 @@ state_choropleth(df.map16,
 
 ```
 
-For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.
+For year 2016, it seems that overreporting rates tended to be higher in coastal states, and relatively lower in the inner states. This would be an interesting pattern to illustrate, but unfortunately the same said pattern is not observed in previous years, as the maps from 2008 and 2012 indicate. Moreover, just based on the maps it's hard to tell if overreporting is consistent over years for a given state. To investigate this, we turn to cleveland plots.
 
 ** Ideally I would have adjusted the percentage scale to illustrate regular interval, but wasn't able to fix this.
+
 
 ```{r}
 # cleveland dot plot
@@ -100,46 +104,93 @@ ggplot(self_turnout_state_rmNA, aes(freq, fct_reorder2(state,year==2012, freq, .
                             color = year)) +
   geom_point() +
   ggtitle("% of sample claiming to have voted, by state") + ylab("") +
-  theme_dotplot
+  theme_dotplot + xlab ("percentage (in decimal)")
 ```
 
-The cleveland plot of overrporting rates allows us to see the range of over-reporting across states for each year, as well as to identify trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, we can see that there is a pattern over time; over-reporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012.
+The cleveland plot of overrporting rates allows us to see the range of overreporting across all states for each election year, as well as to capture trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, there does seem to be a temporal pattern; overreporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012. 
+
+Next we look at the share of missing values to the self-reported turnout question. While this information does not directly speak to the phenomenon of overreporting per se, the fact that values are missing may be indicative of the unwillingness by respondents to provide an answer, a behavior that might be correlated also with the tendency to lie.
 
 ```{r}
 # share of NA's by state
 ggplot(breakdown.NA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), color = year)) +
   geom_point() +
-  ggtitle("% of sample with missing values to Q about self-reported turnout", sub = "") + ylab("") +
+  ggtitle("% of sample with missing values to Q about self-reported turnout", sub = "") + ylab("") + xlab ("percentage (in decimal)")+
   theme_dotplot
 ```
 
-This plot shows that the share of respondents with missing values for the self-reported turntout (NA) shows a correlation with state. The green and blue dot roughly suggest that a state with a higher overreporting rate in 2012 also tended to have higher rate in 2016. Notice also the very low NA values for 2008. Many of the states also did not have a single NA, which is indicated by the missing red dot for at state level. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, but that this practice changed in subsequent years. The map and the cleveland plots combined suggest that the state-level information aren't significant predictors of over-reporting. In any case, any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than "cultural" variation in the likelihood that an individual would feel pressured to lie about not having voted. On that note, next we look at some of the demographic and political traits of individuals that may explain over-reporting.
+This plot shows that the share of respondents with missing values for the self-reported turnout question (NA) are somewhat consistent over time within states. The green and blue dots roughly suggest that states with higher overreporting rates in 2012 also tended to have higher rates in 2016. Notice also the very low NA values for 2008. Many of the states in fact did not have a single NA, which is indicated by the missing red dot for many states. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, and this practice may have changed in subsequent years. 
+
+Together, the maps and the cleveland plots suggest that state-level information show some trends in administrative errors/overreporting but not a consistent enough pattern to support a statement one way or another. Based on the findings, it seems that any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than "cultural" variation in the likelihood that an individual would feel pressured to lie about not having voted. This would also explain why administrative errors/overreporting do not appear consistent within states over time--to the extent that state variations are explained more by admin errors, this would be highly contingent on the administrative capacity, which can vary depending on the pace of new technology, and would be less sticky than say, "cultural" characteristics. On that note, next we look at some of the demographic and political traits of individuals that may explain overreporting.
 
 ## Demographic and political traits of respondents
+
+The dataset includes many demographic and political variables. Below, I sample just a few examples to illustrate interesting points.
 
 ```{r}
 #install.packages("vcd")
 library(vcd)
 
-mosaic(turnout_self01~gender+educ,data=df.self,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"),main="over-reporting by gender and education")
+df.self1<-df.self %>%
+  mutate(educ = 
+           with(.,
+                case_when(
+                  educ ==1~"NoHS",
+                  educ ==2~"HS",
+                  educ ==3~"some_colg",
+                  educ ==4~"2yr",
+                  educ ==5~"4yr",
+                  educ ==6~"postgrad")))
+
+df.self1$educ<-factor(df.self1$educ,levels=c("NoHS", "HS","some_colg",
+                                             "2yr","4yr","postgrad"))
+
+df.self1$selfreported_turnout<-df.self1$turnout_self01
+df.self1$selfreported_turnout<-ifelse(df.self1$selfreported_turnout==1,"Yes","No")
+
+mosaic(selfreported_turnout~gender+educ,data=df.self1,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"),main="overreporting by gender and education",labeling=labeling_border(
+        rot_labels = c(0, 0, 60, 0), 
+    #    just_labels=c("left","left","right","right"),
+    #    tl_varnames = FALSE,
+        gp_labels = gpar(fontsize = 9)))
 ```
 
-Those with higher level of education are more likely than others to over-report turnout. While it's possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.
+The mosaic plot above shows that those with higher level of education are more likely than others to overreport turnout. (To the extent that the likelihood of administrative error in voting record should not differ by gender or voter's educational level, I assume that the difference is driven by individual propensity to lie, and not by admin error) While it's possible that the population with higher education also votes at a higher rate, recall that the underlying data is limited to those for whom there is no record of having voted, so we're looking at the tendency to lie, conditional on not having voted. An explanation for this pattern would be that individuals with higher level of education are (a) aware of the importance of voting as a civic duty, and (b) have peers who would expect them to vote. Hence, conditional on not having voted, the pressure to lie and say that they did would be higher. The mosaic plot indicates that this pattern is found in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rates than do women, but that the difference across gender categories are smaller than the differences across educational levels.
+
+** ideally the labels on the bottom should not encroach the actual mosaic plots.
 
 ```{r}
 library(vcd)
-df3<-df.self[,c("strong_partisan","pid3","turnout_self01")]
-df3<-df3[df3$pid3 %in% c(1,2),]
-
+df3<-df.self[,c("strong_partisan","pid3","turnout_self01","gender")]
+df3<-df3[df3$pid3 %in% c(1,2,3,5),]
 df3$party<-df3$pid3
+
+df3<-df3 %>%
+  mutate(party = 
+           with(.,
+                case_when(
+                  pid3 ==1~"Dem",
+                  pid3 ==2~"Rep",
+                  pid3 ==3~"Ind",
+                  pid3 ==5~"Unsure")))
+
 df3$selfreported_turnout<-df3$turnout_self01
 df3$selfreported_turnout<-ifelse(df3$selfreported_turnout==1,"Yes","No")
 df3$strong_partisan<-ifelse(df3$strong_partisan==1,"Yes","No")
+
+mosaic(selfreported_turnout~gender+party,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by gender and party")
+```
+Now we look at how overreporting rate differs by gender and party affiliation.
+What is noticeable is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is even lower for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
+
+```{r}
+
+df3<-df3[df3$pid3 %in% c(1,2),]
 df3$party<-ifelse(df3$party==1,"Democrat","Republican")
 mosaic(selfreported_turnout~party+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by party and partisan strength")
 ```
 
-Now we look at how overreporting rate differs by party affiliation, and  It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
+This plot takes into account the strength of partisanship. It shows that while the overall pattern of overreporting is similar for Democrats and Republicans, Republicans are marginally more likely to overreport regardless of partisanship strength. As may be intuitive, those who claimed to be strong partisans, i.e. Strong Republicans or Strong Democrats, were also more likely to overreport. 
 
 ## Does the size of our social network predict over-reporting?
 
@@ -152,6 +203,7 @@ library(ggplot2)
 df.self$residence<-factor(df.self$residence,levels=c("Less than 1 month","1 to 6 months","7 to 11 months","1 to 2 years", "3 to 4 years","5 or more years"))
 
 residence<-df.self%>%
+  filter(!is.na(residence))%>%
   group_by(residence,turnout_self01) %>%
   summarise(n=n())%>%
   mutate(freq=n/sum(n)) %>%
@@ -159,8 +211,8 @@ residence<-df.self%>%
 
 ggplot(residence, aes(freq, residence)) +
   geom_point() +
-  ggtitle("% claiming to have voted, by length of residence") +
-  ylab("") +xlab("percentage share")+
+  ggtitle("% overreporting by length of residence") +
+  ylab("") +xlab("percentage")+
   theme(plot.title = element_text(hjust = 0.5))+
   theme_dotplot
 ```
@@ -194,7 +246,7 @@ church.rmNA1<-df.self%>%
 ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   geom_point() +
   ggtitle("% over-reporting by church attendance") +
-  ylab("") +xlab("percentage share")+
+  ylab("") +xlab("percentage")+
   theme(plot.title = element_text(hjust = 0.5))+
   theme_dotplot
 ```
