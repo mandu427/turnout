@@ -165,7 +165,7 @@ df3<-df.self[,c("strong_partisan","pid3","turnout_self01","gender")]
 df3<-df3[df3$pid3 %in% c(1,2,3,5),]
 df3$party<-df3$pid3
 
-df3<-df3 %>%
+df2<-df3 %>%
   mutate(party = 
            with(.,
                 case_when(
@@ -174,18 +174,23 @@ df3<-df3 %>%
                   pid3 ==3~"Ind",
                   pid3 ==5~"Unsure")))
 
-df3$selfreported_turnout<-df3$turnout_self01
-df3$selfreported_turnout<-ifelse(df3$selfreported_turnout==1,"Yes","No")
-df3$strong_partisan<-ifelse(df3$strong_partisan==1,"Yes","No")
+df2$selfreported_turnout<-df2$turnout_self01
+df2$selfreported_turnout<-ifelse(df2$selfreported_turnout==1,"Yes","No")
+df2$strong_partisan<-ifelse(df2$strong_partisan==1,"Yes","No")
 
-mosaic(selfreported_turnout~gender+party,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by gender and party")
+mosaic(selfreported_turnout~gender+party,data=df2,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by gender and party")
 ```
+
 Now we look at how overreporting rate differs by gender and party affiliation.
 What is noticeable is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is even lower for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
 
 ```{r}
 df3<-df3[df3$pid3 %in% c(1,2),]
 df3$party<-ifelse(df3$party==1,"Democrat","Republican")
+df3$selfreported_turnout<-df3$turnout_self01
+df3$selfreported_turnout<-ifelse(df3$selfreported_turnout==1,"Yes","No")
+df3$strong_partisan<-ifelse(df3$strong_partisan==1,"Yes","No")
+
 mosaic(selfreported_turnout~party+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"), main="over-reporting by party and partisan strength")
 ```
 
