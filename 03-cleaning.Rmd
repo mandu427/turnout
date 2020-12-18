@@ -9,6 +9,6 @@
 devtools::install_github("hrbrmstr/statebins")
 library(dplyr)
 library(tidyverse)
-df.self<-read.csv("/Users/siyeona/cleaned_data.csv")
+df.self<-read.csv("~/Documents/turnout/cleaned_data.csv"")
 df.self$year<-as.factor(df.self$year)
 ```
