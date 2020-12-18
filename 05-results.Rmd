@@ -208,30 +208,9 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
 ```
 
 
-```{r, echo=FALSE}
-
-# df_likert <- df.self %>%
-#   filter(pew_churatd!= 'NA' & pew_religimp != 'NA')
-
-df_likert <- df.self %>%
-  filter(!is.na(pew_churatd) & !is.na(pew_religimp))
-
-df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very important","Somewhat important", "Not too important","Not at all important"))
-
-ggplot(df_likert) + 
- geom_bar(aes(x = reorder(pew_churatd,desc(pew_churatd)),fill = reorder(pew_religimp,desc(pew_religimp))), position = 'fill')+
-  ylab('percentage')+
-  xlab('church attendance frequency')+
-  ggtitle('relationship b/w religiosity and church attendance')+
-  coord_flip()+
-  scale_fill_manual(values = c("seashell","lightsalmon1","salmon3","tomato4"))+
-  labs(fill="religion's importance")
-```
-
 - The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
 
 * FYI: I wanted to have the "Very important" appear on the top of the legend, but I couldn't figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kep it as is.
-
 
 
 - d) by election cycle; general election including presidential vs. off yr etc. (election specific variables)
