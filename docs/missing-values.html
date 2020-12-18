@@ -76,7 +76,11 @@
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#are-there-state-level-variations-in-over-reporting"><i class="fa fa-check"></i><b>5.1</b> Are there state-level variations in over-reporting?</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#demographic-and-political-traits-of-respondents"><i class="fa fa-check"></i><b>5.2</b> Demographic and political traits of respondents</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#does-the-size-of-our-social-network-predict-over-reporting"><i class="fa fa-check"></i><b>5.3</b> Does the size of our social network predict over-reporting?</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -100,6 +104,52 @@
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
+<p>My dataset is quite large, so for the purpose of visualization I deleted the variables which were derived from other variables, as their missing pattern would be the same. I also deleted variables whose missingness is not meaningful (e.g. variable for additional notes, which is (a) optional and (b) text data). I also restrict the analysis to year 2016, which still leaves me with 5,783 observations.</p>
+<pre><code>##  turnout_self01       residence            pid7 strong_partisan         newsint 
+##            3580              33              25              25              20 
+##     pew_churatd          faminc           state        tookpost          gender 
+##              11               6               0               0               0 
+##            race             age            educ  vv_turnout_gvm    vv_regstatus 
+##               0               0               0               0               0</code></pre>
+<pre><code>## NOTE: The following pairs of variables appear to have the same missingness pattern.
+##  Please verify whether they are in fact logically distinct variables.
+##      [,1]   [,2]             
+## [1,] &quot;pid7&quot; &quot;strong_partisan&quot;</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre><code>##  [1] &quot;nothing&quot;                              
+##  [2] &quot;turnout_self01&quot;                       
+##  [3] &quot;pew_churatd&quot;                          
+##  [4] &quot;residence&quot;                            
+##  [5] &quot;newsint&quot;                              
+##  [6] &quot;faminc&quot;                               
+##  [7] &quot;newsint, turnout_self01&quot;              
+##  [8] &quot;pew_churatd, turnout_self01&quot;          
+##  [9] &quot;residence, pew_churatd&quot;               
+## [10] &quot;pid7, strong_partisan&quot;                
+## [11] &quot;faminc, turnout_self01&quot;               
+## [12] &quot;residence, turnout_self01&quot;            
+## [13] &quot;pid7, residence, strong_partisan&quot;     
+## [14] &quot;pid7, pew_churatd, strong_partisan&quot;   
+## [15] &quot;pid7, turnout_self01, strong_partisan&quot;</code></pre>
+<pre><code>##                               nothing                        turnout_self01 
+##                                 17202                                  3490 
+##                           pew_churatd                             residence 
+##                                   204                                    27 
+##                               newsint                                faminc 
+##                                    13                                     4 
+##               newsint, turnout_self01           pew_churatd, turnout_self01 
+##                                     7                                    77 
+##                residence, pew_churatd                 pid7, strong_partisan 
+##                                     2                                    20 
+##                faminc, turnout_self01             residence, turnout_self01 
+##                                     2                                     2 
+##      pid7, residence, strong_partisan    pid7, pew_churatd, strong_partisan 
+##                                     2                                     1 
+## pid7, turnout_self01, strong_partisan 
+##                                     2</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>As one can see immediately from the charts, the only variable with a substantial number of missing values is the <em>turnout_self01</em>, i.e. self-reported turnout, which is the dependent variable of interest. Out of the 5,783 observations, 916 are missing this value. The variable that has the next highest number of values is <em>pid7</em> political affiliation using 7 scales, with only 9 missing values. Strong_partisanship is a variable that is perfectly aligned in terms of categories as pid7, so it also has 9 missing values. Again, there are 4 additional variables with missing values (newint, residence, faminc) but they are in the single digits and given that it’s a neglibile share relative to the size of the full dataset, it would be easiest to drop these values from the analysis.</p>
+<p>As for the missing turnout variable, given that this is the dependent variable of interest, I wouldn’t feel comfortable imputing the value. As a result, I will drop the NAs.</p>
 
 </div>
             </section>
