@@ -1,1 +1,212 @@
 # Results
+
+```{r}
+self_turnout_state_rmNA<-df.self%>%
+  filter(!is.na(turnout_self01))%>%
+  group_by(state,year,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(turnout_self01==1)
+
+head(self_turnout_state_rmNA)
+```
+
+```{r, echo=FALSE}
+#data prep
+table(df.self$turnout_self01)
+
+breakdown<-df.self%>%
+  group_by(state,year,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n))
+
+
+breakdown.NA<-df.self%>%
+  group_by(state,year,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(is.na(turnout_self01))
+
+head(breakdown.NA)
+
+breakdown.NA1<-df.self%>%
+  group_by(state,year,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(turnout_self01==1)
+```
+
+```{r}
+self_turnout_state08<-self_turnout_state_rmNA[self_turnout_state_rmNA$year==2008,]
+self_turnout_state12<-self_turnout_state_rmNA[self_turnout_state_rmNA$year==2012,]
+self_turnout_state16<-self_turnout_state_rmNA[self_turnout_state_rmNA$year==2016,]
+
+```
+
+## Are there state-level variations in over-reporting?
+```{r}
+#install.packages("choroplethrMaps")
+#install.packages("choroplethr")
+library(choroplethrMaps)
+library(tidyverse)
+library(choroplethr)
+
+# data frame must contain "region" and "value" columns
+
+df.map08 <- self_turnout_state08 %>% 
+  as.data.frame() %>%
+  transmute(region = tolower(`state`), value = freq)
+
+df.map12 <- self_turnout_state12 %>% 
+  as.data.frame() %>%
+  transmute(region = tolower(`state`), value = freq)
+
+df.map16 <- self_turnout_state16 %>% 
+  as.data.frame() %>%
+  transmute(region = tolower(`state`), value = freq)
+
+state_choropleth(df.map08,
+                 title = "2008",
+                 legend = "Percent?")
+
+state_choropleth(df.map12,
+                 title = "2012",
+                 legend = "Percent?")
+
+state_choropleth(df.map16,
+                 title = "2016",
+                 legend = "Percent?")
+
+```
+For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.
+
+```{r}
+# cleveland dot plot
+theme_dotplot <- theme_bw(14) +
+    theme(axis.text.y = element_text(size = rel(.75)),
+        axis.ticks.y = element_blank(),
+        axis.title.x = element_text(size = rel(.75)),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_line(size = 0.5),
+        panel.grid.minor.x = element_blank())
+
+self_turnout_state_rmNA$year<-as.factor(self_turnout_state_rmNA$year)
+ggplot(self_turnout_state_rmNA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), 
+                            color = year)) +
+  geom_point() +
+  ggtitle("% of sample claiming to have voted, by state") + ylab("") +
+  theme_dotplot
+```
+The cleveland plot of overrporting rates allows us to see the range of over-reporting across states for each year, as well as to identify trends across years. While the share of the sample claiming to have voted does not form a tight band around the average at state-level, we can see that there is a pattern over time; over-reporting rates were much lower in 2008, whereas the blue dots lying to the right of green suggest that the values for 2016 in generally tended to be higher than in 2012.
+
+```{r}
+# share of NA's by state
+ggplot(breakdown.NA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), color = year)) +
+  geom_point() +
+  ggtitle("% of sample with missing values to Q about self-reported turnout", sub = "") + ylab("") +
+  theme_dotplot
+```
+This plot shows that the share of respondents with missing values for the self-reported turntout (NA) shows a correlation with state. The green and blue dot roughly suggest that a state with a higher overreporting rate in 2012 also tended to have higher rate in 2016. Notice also the very low NA values for 2008. Many of the states also did not have a single NA, which is indicated by the missing red dot for at state level. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, but that this practice changed in subsequent years. The map and the cleveland plots combined suggest that the state-level information aren't significant predictors of over-reporting. In any case, any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than "cultural" variation in the likelihood that an individual would feel pressured to lie about not having voted. On that note, next we look at some of the demographic and political traits of individuals that may explain over-reporting.
+
+## Demographic and political traits of respondents
+
+```{r}
+#install.packages("vcd")
+library(vcd)
+### change numbers to actual thins
+# 1 democrat
+# 2 rep 
+# 3 ind
+# 4 other
+# 5 unsure
+
+mosaic(turnout_self01~gender+educ,data=df.self,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"))
+```
+Those with higher level of education are more likely than others to over-report turnout. While it's possible that this population also votes at a higher rate, the underlying data only look at those for whom there is no record of having voted, and the mosaic plot indicates that this pattern is found commonly in female as well as male respondents. We can also deduce that at each level of income males over-report at slightly higher rate than do women, but that the difference across gender categories are smaller than the differences across educational levels.
+
+overreporting by strong partisanship and party affiliation
+```{r}
+df3<-df.self[,c("strong_partisan","pid3","turnout_self01")]
+df3<-df3[df3$pid3 %in% c(1,2),]
+
+mosaic(turnout_self01~pid3+strong_partisan,data=df3,direction=c("v","v","h"),highlighting_fill = c("seashell","salmon1"))
+```
+Now we look at how overreporting rate differs by party affiliation, and  It shows that the overall pattern of over-reporting is similar for both female and male, but that on average, men are marginally more likely to overreport, regardless of their political affiliation. What is especially interesting is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is especially low for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
+
+## Does the size of our social network predict over-reporting?
+
+Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to over-report? While there are no perfect measures of social network, two variables included in the CCES stand out: (1) length of residency at current address and (2) frequency of church attendance. There are caveats that we need to take into consideration of course. If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn't mean I have weak ties to my neighbors.  Similarly, many people don't there are people who don't have any religious social network, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I limit the extrapolation I do on the church variable to "church-goers." In other words, whatever conclusion I draw shall be limited to those who would consider going to church at any point vs. those who are not Christians, or would never consider going to church.
+
+```{r}
+table(df.self$residence)
+
+df.self$residence<-factor(df.self$residence,levels=c("Less than 1 month","1 to 6 months","7 to 11 months","1 to 2 years", "3 to 4 years","5 or more years"))
+
+table(df.self$residence)
+levels(df.self$residence)
+
+residence<-df.self%>%
+  group_by(residence,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(turnout_self01==1)
+
+ggplot(residence, aes(freq, residence)) +
+  geom_point() +
+  ggtitle("% claiming to have voted (by length of residence)", sub = "NA is a separate category") +
+  ylab("") +
+  theme_dotplot
+
+
+residence.NA<-df.self%>%
+  group_by(residence,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(is.na(turnout_self01))
+
+ggplot(residence.NA, aes(freq, reorder(residence, freq))) +
+  geom_point() +
+  ggtitle("% with missing values on self-reported turnout Q (by length of residence)", sub = "i.e. share of NAs") + ylab("") +
+  theme_dotplot
+```
+
+```{r}
+table(df.self$pew_churatd)
+
+df.self$pew_churatd<-factor(df.self$pew_churatd,levels=c("More than once a week", "Once a week","Once or twice a month", "A few times a year","Seldom","Never", "Don't know"))
+
+levels(df.self$pew_churatd)
+
+church.NA<-df.self%>%
+  group_by(pew_churatd,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(is.na(turnout_self01))
+
+#ggplot(church.NA, aes(freq, reorder(pew_churatd, freq))) +
+ggplot(church.NA, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
+  geom_point() +
+  ggtitle("% with missing values on self-reported turnout Q (by church attendance)", sub = "i.e. share of NAs") + ylab("") +
+  theme_dotplot
+
+church.rmNA1<-df.self%>%
+  filter(!is.na(turnout_self01)) %>%
+  group_by(pew_churatd,turnout_self01) %>%
+  summarise(n=n())%>%
+  mutate(freq=n/sum(n)) %>%
+  filter(turnout_self01==1)
+
+
+ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
+  geom_point() +
+  ggtitle("% over-reporting by church attendance", sub = "NAs not included") +
+  ylab("") +
+  theme_dotplot
+
+
+```
+- d) by election cycle; general election including presidential vs. off yr etc. (election specific variables)
+- e) turnout; margin of elections (This data will come from the MIT Elections Data) (if time allows)
+```{r}
+
+```

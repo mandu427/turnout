@@ -5,3 +5,10 @@
 - Rename variables from each year to prepare for the merger. A similar set of questions were asked each year but they didn't necessarily have the same variable names.
 - Recode variables with several levels into binary variables where it is helpful: This is done for variables such as church01, which is 1 if the person goes to church at least several times a year and 0 otherwise. (The original variable had more detailed frequencies.) Similar steps were taken to indicate stable_residency01, which is 1 if the person has been residing at current address for >1 year.
 - The electoral outcome at state-year level from the MIT Elections data was merged with the respondent's state-year to create variables indicating how big the margin was in the race they voted, and which party won. These variables make it possible to capture the "political reality" of the electoral unit (state) in which each respondent is voting. Whether this political reality predicts differential rate of overreporting corresponds to item (e) on my list of questions; as mentioned above I'm not sure if I'll have time to get to it but the variables have been merged and created!
+```{r}
+devtools::install_github("hrbrmstr/statebins")
+library(dplyr)
+library(tidyverse)
+df.self<-read.csv("/Users/siyeona/cleaned_data.csv")
+df.self$year<-as.factor(df.self$year)
+```

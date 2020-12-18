@@ -14,14 +14,14 @@ df16<-df.self %>%
 
 ```
 
-```{r,echo=FALSE}
+```{r}
 #install.packages("mi")
 #install.packages("betareg")
 #install.packages("remotes")
+library(dplyr)
 library(mi)
 library(betareg)
 library(remotes)
-library(dplyr)
 remotes::install_github("cran/extracat")
 
 colSums(is.na(df16)) %>%
