@@ -1,3 +1,4 @@
 # Conclusion
 
-hello, simple text
+The main limitations of this project--related to the fact that we cannot distinguish between administrative errors and lies--were discussed at the outset. Despite this challenge, it is possible, at least for variables that we 
+Discuss limitations and future directions, lessons learned.
