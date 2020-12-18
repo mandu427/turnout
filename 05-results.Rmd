@@ -207,7 +207,7 @@ church.rmNA1<-df.self%>%
 ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   geom_point() +
   ggtitle("% over-reporting by church attendance") +
-  ylab("") +xlab("percentage share")
+  ylab("") +xlab("percentage share")+
   theme_dotplot
 ```
 
