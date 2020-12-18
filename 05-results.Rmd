@@ -83,7 +83,7 @@ state_choropleth(df.map16,
 
 For year 2016, it seems that over-reporting rates tended to be higher in coastal states, and relatively lower in the inner states. The pattern is not repeated in previous years, however, as the earlier maps indicate.
 
-* Ideally I would have adjusted the percentage scale to illustrate regular interval, but wasn't able to fix this.
+** Ideally I would have adjusted the percentage scale to illustrate regular interval, but wasn't able to fix this.
 
 ```{r}
 # cleveland dot plot
@@ -151,9 +151,6 @@ library(ggplot2)
 
 df.self$residence<-factor(df.self$residence,levels=c("Less than 1 month","1 to 6 months","7 to 11 months","1 to 2 years", "3 to 4 years","5 or more years"))
 
-#table(df.self$residence)
-#levels(df.self$residence)
-
 residence<-df.self%>%
   group_by(residence,turnout_self01) %>%
   summarise(n=n())%>%
@@ -164,19 +161,8 @@ ggplot(residence, aes(freq, residence)) +
   geom_point() +
   ggtitle("% claiming to have voted, by length of residence") +
   ylab("") +xlab("percentage share")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
   theme_dotplot
-
-# residence.NA<-df.self%>%
-#   group_by(residence,turnout_self01) %>%
-#   summarise(n=n())%>%
-#   mutate(freq=n/sum(n)) %>%
-#   filter(is.na(turnout_self01))
-# 
-# ggplot(residence.NA, aes(freq, reorder(residence, freq))) +
-#   geom_point() +
-#   ggtitle("% with missing values on self-reported turnout Q (by length of residence)", sub = "i.e. share of NAs") + ylab("") +
-#   theme_dotplot
 ```
 
 ```{r}
@@ -241,8 +227,6 @@ df.gender<-df.self%>%
   summarise(n=n())%>%
   mutate(freq=n/sum(n)) %>%
   filter(turnout_self01==1)
-  
-df.gender$freq
 
 df.race<-df.self%>%
   group_by(race,year,turnout_self01) %>%
@@ -250,6 +234,5 @@ df.race<-df.self%>%
   mutate(freq=n/sum(n)) %>%
   filter(turnout_self01==1)
   
-df.race
 ```
 
