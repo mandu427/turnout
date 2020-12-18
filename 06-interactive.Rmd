@@ -8,4 +8,6 @@ There are two ways of presenting this data: (1) holding the scale constant, (2) 
 
 https://vizhub.com/mandu427/268ba661bb3d4f0ba82188fa0a60d689?edit=files&file=index.html&line&mode=full
 
-The second link replicates a similar plot, but this time for race. Again, I use the maximum y value in each year as the maximum value of the y scale, which makes it easier to see that the overreporting rate among Asians has increased relative to the share of Whites, for instance. I don't have a specific theoretical explanation for this, but it's important to note that the number of observations for Asians (e.g. 612 in year 2016), is much smaller than for Whites(9,710 in 2016) so it's possible that some of the change is due to sampling.
+The second link replicates a similar plot, but for race. Again, I use the maximum y value in each year as the maximum value of the y scale, which makes it easier to see that the over-reporting rate among Asians has increased relative to the share of Whites, from 2008 to 2012, and again in 2016. I don't have a specific theoretical explanation for this, but it's important to note that the number of observations for Asians (e.g. 612 in year 2016), is much smaller than for Whites (9,710 in 2016) so it's possible that some of the change is due to sampling.
+
+The code for the interactive visualizations were based on modificatoins of this code: https://www.d3-graph-gallery.com/graph/barplot_button_data_hard.html
