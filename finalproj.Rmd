@@ -59,12 +59,14 @@ knitr::opts_chunk$set(
 - The electoral outcome at state-year level from the MIT Elections data was merged with the respondent's state-year to create variables indicating how big the margin was in the race they voted, and which party won. These variables make it possible to capture the "political reality" of the electoral unit (state) in which each respondent is voting. Whether this political reality predicts differential rate of overreporting corresponds to item (e) on my list of questions; as mentioned above I'm not sure if I'll have time to get to it but the variables have been merged and created!
 
 
+
 ```{r}
 devtools::install_github("hrbrmstr/statebins")
 library(dplyr)
 library(tidyverse)
 df.self<-read.csv("~/Documents/turnout/cleaned_data.csv")
 df.self$year<-as.factor(df.self$year)
+
 ```
 
 <!--chapter:end:03-cleaning.Rmd-->
@@ -135,24 +137,6 @@ knitr::opts_chunk$set(
 )
 ```
 # Results
-
-```{r}
-# df_likert <- df.self %>%
-#   filter(pew_churatd!= 'NA' & pew_religimp != 'NA')
-df_likert <- df.self %>%
-  filter(!is.na(pew_churatd) & !is.na(pew_religimp))
-
-df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very important","Somewhat important", "Not too important","Not at all important"))
-
-ggplot(df_likert) + 
- geom_bar(aes(x = reorder(pew_churatd,desc(pew_churatd)),fill = reorder(pew_religimp,desc(pew_religimp))), position = 'fill')+
-  ylab('percentage')+
-  xlab('church attendance frequency')+
-  ggtitle('relationship b/w religiosity and church attendance')+
-  coord_flip()+
-  scale_fill_manual(values = c("seashell","lightsalmon1","salmon3","tomato4"))+
-  labs(fill="religion's importance")
-```
 
 ```{r}
 self_turnout_state_rmNA<-df.self%>%
@@ -357,7 +341,23 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   theme_dotplot
 ```
 
+```{r}
+# df_likert <- df.self %>%
+#   filter(pew_churatd!= 'NA' & pew_religimp != 'NA')
+df_likert <- df.self %>%
+  filter(!is.na(pew_churatd) & !is.na(pew_religimp))
 
+df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very important","Somewhat important", "Not too important","Not at all important"))
+
+ggplot(df_likert) + 
+ geom_bar(aes(x = reorder(pew_churatd,desc(pew_churatd)),fill = reorder(pew_religimp,desc(pew_religimp))), position = 'fill')+
+  ylab('percentage')+
+  xlab('church attendance frequency')+
+  ggtitle('relationship b/w religiosity and church attendance')+
+  coord_flip()+
+  scale_fill_manual(values = c("seashell","lightsalmon1","salmon3","tomato4"))+
+  labs(fill="religion's importance")
+```
 
 - The above plot shows that indeed those who are frequent church goes are also more religious. However, even for those who go to church only seldom, more than half of the respondents from this group say that religion is very or somewhat important.
 
@@ -375,7 +375,7 @@ knitr::opts_chunk$set(
 ```
 # Interactive component
 
-link
+https://vizhub.com/mandu427/6cc35a21157e482b8f354a65ca5b6c2d?edit=files&file=index.html&line
 
 <!--chapter:end:06-interactive.Rmd-->
 
