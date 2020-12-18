@@ -47,7 +47,7 @@ self_turnout_state16<-self_turnout_state_rmNA[self_turnout_state_rmNA$year==2016
 
 ## Are there state-level variations in over-reporting?
 
-Looking at state-level variations is interesting, first, because if there are any differences in administrative errors, administrative boundaries would be the logical place to look for it. After assuming away errors, however, it's also possible that certain cultural elements captured by states could influence whether overreporting is higher consistently in certain states over another. To see if there are interesting insight, I plot the overreporting rate by state. I visualize these on the map, as it'd be possible to detect if there are any geographic pattern to this phenomenon.
+Looking at state-level variations is interesting, first, because if there are any differences in administrative errors, administrative boundaries would be the logical place to look for it. After assuming away errors, however, it's also possible that certain cultural elements captured by states could influence whether overreporting is higher consistently in certain states over another. To see if there are interesting insight, I plot the overreporting rates by state. I visualize these on the map, as it'd be possible to detect if there are any geographic pattern to this phenomenon.
 
 ```{r}
 #install.packages("choroplethrMaps")
@@ -60,27 +60,27 @@ library(choroplethr)
 
 df.map08 <- self_turnout_state08 %>% 
   as.data.frame() %>%
-  transmute(region = tolower(`state`), value = freq)
+  transmute(region = tolower(`state`), value = freq*100)
 
 df.map12 <- self_turnout_state12 %>% 
   as.data.frame() %>%
-  transmute(region = tolower(`state`), value = freq)
+  transmute(region = tolower(`state`), value = freq*100)
 
 df.map16 <- self_turnout_state16 %>% 
   as.data.frame() %>%
-  transmute(region = tolower(`state`), value = freq)
+  transmute(region = tolower(`state`), value = freq*100)
 
 state_choropleth(df.map08,
                  title = "2008",
-                 legend = "Percent")
+                 legend = "%")
 
 state_choropleth(df.map12,
                  title = "2012",
-                 legend = "Percent")
+                 legend = "%")
 
 state_choropleth(df.map16,
                  title = "2016",
-                 legend = "Percent")
+                 legend = "%")
 
 ```
 
@@ -121,11 +121,11 @@ ggplot(breakdown.NA, aes(freq, fct_reorder2(state,year==2012, freq, .desc=F), co
 
 This plot shows that the share of respondents with missing values for the self-reported turnout question (NA) are somewhat consistent over time within states. The green and blue dots roughly suggest that states with higher overreporting rates in 2012 also tended to have higher rates in 2016. Notice also the very low NA values for 2008. Many of the states in fact did not have a single NA, which is indicated by the missing red dot for many states. This likely suggests that there was a change in the way the survey was conducted. It might not have been possible to proceed with the survey without answering the question in 2008, and this practice may have changed in subsequent years. 
 
-Together, the maps and the cleveland plots suggest that state-level information show some trends in administrative errors/overreporting but not a consistent enough pattern to support a statement one way or another. Based on the findings, it seems that any discrepncies that are observed across states are likely to be attributable to administrative errors, rather than "cultural" variation in the likelihood that an individual would feel pressured to lie about not having voted. This would also explain why administrative errors/overreporting do not appear consistent within states over time--to the extent that state variations are explained more by admin errors, this would be highly contingent on the administrative capacity, which can vary depending on the pace of new technology, and would be less sticky than say, "cultural" characteristics. On that note, next we look at some of the demographic and political traits of individuals that may explain overreporting.
+Together, the maps and the cleveland plots suggest that state-level information show some trends in administrative errors/overreporting but not a consistent enough pattern to support a statement one way or another. Based on the findings, it seems that any discrepancies that are observed across states are likely to be attributable to administrative errors, rather than state-level "cultural" variation in the likelihood that an individual would feel pressured to lie about not having voted. This would also explain why administrative errors/overreporting do not appear consistent within states over time--to the extent that state variations are explained more by admin errors, this would be highly contingent on the administrative capacity, which can vary depending on the pace of adopting new technology, and would be less constant over time than "cultural" characteristics. On that note, next we look at some of the demographic and political traits of individuals that may explain overreporting.
 
 ## Demographic and political traits of respondents
 
-The dataset includes many demographic and political variables. Below, I sample just a few examples to illustrate interesting points.
+The dataset includes many demographic and political variables. Below, I sample just a few variables to visualize the relationship with overreporting.
 
 ```{r}
 #install.packages("vcd")
@@ -155,7 +155,7 @@ mosaic(selfreported_turnout~gender+educ,data=df.self1,direction=c("v","v","h"),h
         gp_labels = gpar(fontsize = 9)))
 ```
 
-The mosaic plot above shows that those with higher level of education are more likely than others to overreport turnout. (To the extent that the likelihood of administrative error in voting record should not differ by gender or voter's educational level, I assume that the difference is driven by individual propensity to lie, and not by admin error) While it's possible that the population with higher education also votes at a higher rate, recall that the underlying data is limited to those for whom there is no record of having voted, so we're looking at the tendency to lie, conditional on not having voted. An explanation for this pattern would be that individuals with higher level of education are (a) aware of the importance of voting as a civic duty, and (b) have peers who would expect them to vote. Hence, conditional on not having voted, the pressure to lie and say that they did would be higher. The mosaic plot indicates that this pattern is found in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rates than do women, but that the difference across gender categories are smaller than the differences across educational levels.
+The mosaic plot above shows that those with higher level of education are more likely than others to overreport turnout. (To the extent that the likelihood of administrative error in voting record should not differ by gender or voter's educational level, I assume that the difference is driven by individual propensity to lie, and not by admin error) While it's possible that the population with higher education also votes at a higher rate, recall that the underlying data is limited to those for whom there is no record of having voted, so we're looking at the tendency to lie, conditional on not having voted. An explanation for this pattern would be that individuals with higher level of education are (a) aware of the importance of voting as a civic duty, and (b) have peers who would expect them to vote. Hence, conditional on not having voted, the pressure to lie and say that they did may be higher. The mosaic plot indicates that this pattern is found in female as well as male respondents. We can also deduce that at each level of income, males over-report at slightly higher rates than do women, but that the difference across gender categories are smaller than the differences across educational levels.
 
 ** ideally the labels on the bottom should not encroach the actual mosaic plots.
 
@@ -182,7 +182,7 @@ mosaic(selfreported_turnout~gender+party,data=df2,direction=c("v","v","h"),highl
 ```
 
 Now we look at how overreporting rate differs by gender and party affiliation.
-What is noticeable is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is even lower for those who responded that they were "Unsure" about their political affiliation. In other words, the stronger the political affiliation/identity, the more likely an individual is to say that they voted when in fact they did not. There may be a number of reasons for this behavior. Those who have strong interest in politics are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
+What is noticeable is the fact that Independents are less likely than both Democrats and Republicans to overreport, and that overrepoting rate is even lower for those who responded that they were "Unsure" about their political affiliation. In other words, those with a political affiliation/identity are more likely to say that they voted when in fact they did not. Those who profess interest in politics and clearly identify with a party are likely to recognize the importance of voting, and conditional on not having voted, the guilt of not having done so and the embarrassment of others finding out would weigh in heavier on this population than others for whom it doesn't matter as much.
 
 ```{r}
 df3<-df3[df3$pid3 %in% c(1,2),]
@@ -198,9 +198,11 @@ This plot takes into account the strength of partisanship. It shows that while t
 
 ## Does the size of our social network predict over-reporting?
 
-Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to overreport? While there are no perfect measures of social network size in the CCES dataset, two variables can serve as proxies: (1) length of residency at current address and (2) frequency of church attendance. Those who have lived for a long time within a neighborhood would presumably have a larger local network size, i.e. peers who would matter in terms of putting pressure on them to vote. Similarly, those who are regular church attenders would presumably have more ties to other church members, holding friends and colleagues from other sources constant.
+Similar to the demographic variables surveyed above, one would wonder, does having a large/strong social network influence how likely you are to overreport? When you have a lot of people who will count on you to vote, and you meet these people on frequent basis, and you value your relationship with them, are you more likely to feel pressured to lie about not having voted?
 
-There are caveats that we need to take into consideration of course. If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn't mean I have weak ties to my neighbors.  Similarly, many people are not religious and therefore don't have any friends via religion, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I acknowledge that the the findings of the church variable can only be used to make inference about the church going population. In other words, whatever conclusion I draw shall be limited to those who would ever consider going to church, and not be meaningful for understanding the pattern among non-Christians.
+While there are no perfect measures of social network size in the CCES dataset, two variables can serve as proxies: (1) length of residency at current address and (2) frequency of church attendance. Those who have lived for a long time within a neighborhood would presumably have a larger local network size, i.e. peers who would matter in terms of putting pressure on them to vote. Similarly, those who are regular church attenders would presumably have more ties to other church members, holding friends and colleagues from other sources constant.
+
+There are caveats that we need to take into consideration of course--these are not unequivocal measures of social network ties: If I moved to a new address, but that new location is wiithin my old neighborhood, having only lived there for a month doesn't mean I have weak ties to my neighbors.  Similarly, many people are not religious and therefore don't have any friends via religion, but are nonetheless are very tightly embedded in their local social network. To deal with the second potential criticism, I limit the scope of inference that can be made based on findings of the church variable. In other words, whatever conclusion I draw shall be limited to those who would ever consider going to church, and not be meaningful for understanding the pattern among non-Christians.
 
 ```{r}
 library(ggplot2)
@@ -259,7 +261,7 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
   theme_dotplot
 ```
 
-A similar pattern is observed for church attendance. Among those who went to church regularly (more than once a month), overreporting rates are higher. You may be wondering about whether church attendance is really a good proxy. Wouldn't it be possible that those who are more religious also feel more guilty if they didn't manage to vote? And as a result, if asked, wouldn't this pressure make it more likely that they lie? In other words, the source of pressure is not social network size, but religiosity? That would be a valid criticism. I cannot alleviate all doubts, but there are two things to keep in mind in response to that question. First, a level of religiosity strong enough to create guilt would have also motivated individuals to actually go out and vote. We do not know if voter turnout varies by religiosity, and that's not something I can address with the data at hand. What I *can* show, though is how religiosity and church attendance related. The stacked bar chart below illustrate the point.
+A similar pattern is observed for church attendance. Among those who went to church regularly (more than once a month), overreporting rates are higher. You may be wondering about whether church attendance is really a good proxy. Wouldn't it be possible that those who are more religious also feel more guilty if they didn't manage to vote? And as a result, if asked, wouldn't this pressure make it more likely that they lie? In other words, the source of pressure is not social network size, but religiosity? That would be a valid criticism. I cannot alleviate all doubts, but there are two things to keep in mind in response to that question. First, a level of religiosity strong enough to create guilt would have also motivated individuals to actually go out and vote. We do not know if voter turnout varies by religiosity, and that's not something I can address with the data at hand. What I *can* show, though is how religiosity and church attendance are related. The stacked bar chart below illustrate the point.
 
 ```{r}
 # df_likert <- df.self %>%
@@ -279,7 +281,7 @@ ggplot(df_likert) +
   labs(fill="religion's importance")
 ```
 
-As expected, religiosity and church attendance is strongly correlated. Note, however, even for those who "Seldom" go to church, over 50 % of them think that religion is either "Very" or "Somewhat" important. To obatin a definitve response on whether church attendance has a differential impact on overreporting *independent* of religiosity would require a statistical analysis that would be a natural next step for this project.
+As expected, religiosity and church attendance are strongly correlated. Note, however, even for those who "Seldom" go to church, over 50 % of them say that religion is either "Very" or "Somewhat" important. To obtain a definitve answer to whether church attendance has a differential impact on overreporting *independent* of religiosity would therefore require statistical analyses that would be a natural next step for this project.
 
 ** FYI: I wanted to have the "Very important" appear first in the legend, but I couldn't figure out a way to do it without changing the factor levels at the data frame level, which would also reverse the presentation of the chart, which is not what I wanted. So current listing is not ideal, but I kept it as is.
 
