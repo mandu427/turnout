@@ -338,8 +338,12 @@ ggplot(church.rmNA1, aes(freq, reorder(pew_churatd,desc(pew_churatd)))) +
 
 
 ```{r}
-df_likert <- df.self %>% 
-  dplyr::filter(pew_churatd!= 'NA'&pew_religimp != 'NA')
+
+# df_likert <- df.self %>%
+#   filter(pew_churatd!= 'NA' & pew_religimp != 'NA')
+
+df_likert <- df.self %>%
+  filter(!is.na(pew_churatd) & !is.na(pew_religimp))
 
 df_likert$pew_religimp <- factor(df_likert$pew_religimp, levels = c("Very important","Somewhat important", "Not too important","Not at all important"))
 
