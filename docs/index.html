@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Self-reported voter turnout</title>
+  <meta name="description" content="Self-reported voter turnout" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Self-reported voter turnout" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Self-reported voter turnout" />
+  
+  
+  
+
+<meta name="author" content="Jiyeon Chang" />
+
+
+<meta name="date" content="2020-12-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="data-sources.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">self-reported voter turnout</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#are-there-state-level-variations-in-over-reporting"><i class="fa fa-check"></i><b>5.1</b> Are there state-level variations in over-reporting?</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#demographic-and-political-traits-of-respondents"><i class="fa fa-check"></i><b>5.2</b> Demographic and political traits of respondents</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#does-the-size-of-our-social-network-predict-over-reporting"><i class="fa fa-check"></i><b>5.3</b> Does the size of our social network predict over-reporting?</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
+<li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Self-reported voter turnout</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Self-reported voter turnout</h1>
+<p class="author"><em>Jiyeon Chang</em></p>
+<p class="date"><em>2020-12-18</em></p>
+</div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
+<p>Average turnout in US elections hover around 50-60%, but in surveys, the figure is often closer to 70-80%. Why is that? It’s possible that this gap is attributable to nonresponse, but some point out that there is an element of social desirability bias in the way people respond to survey questions. In other words, there are people who lie about whether they voted, i.e. they say they voted even though in reality they did not. This has been a tricky issue for survey researchers, as you can’t take survey response at face value. In this project, I look at what are some of the variables that can may explain over-reporting pattern.</p>
+<p>The main dataset I use to explore this question is the Cooperative Congressional Election Study (<a href="https://cces.gov.harvard.edu/" class="uri">https://cces.gov.harvard.edu/</a>). The survey asks respondents whether they voted in the recent election. For each respondent, there is a variable indicating whether there exists a record of that person of having voted. So the strategy here is to look at respondents for whom there is <em>no</em> record of voting, and compare the group who said they voted (record does not match what they say) vs. those who say that they did not vote (missing record matches their statement). For those who claim to have voted, there are two possible explanations for why there might not be a corresponding voting record for them. First, it may have been an administrative error–if their address has changed recently, or some other identifying information does not match, it’s possible that the missing record is not an indication that they are lying. Alternatively, the respondent may not be telling the truth. There is not definitive way to distinguish which of the observations are due to error or due to lying. However, if we can assume that the rate of administrative error should be random across different populations, then it <em>is</em> possible to see how share of those who claim to have voted (vs. not) differ across individuals with specific demographic, political or social traits.</p>
+<p>Specifically, I report the result of looking at the following variables:</p>
+<ul>
+<li><ol style="list-style-type: lower-alpha">
+<li>state (proxies political climate)</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: lower-alpha">
+<li>age; income; race; political affiliation; strength of partisanship (demographic variables)</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-alpha">
+<li>how long Rs have lived at the current address; frequency of church attendance (ties to community)</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-alpha">
+<li>by election cycle; general election including presidential vs. off yr etc. (election specific variables)</li>
+</ol></li>
+<li><ol start="5" style="list-style-type: lower-alpha">
+<li>turnout; margin of elections (This data will come from the MIT Elections Data) (if time allows)</li>
+</ol></li>
+</ul>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="data-sources.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mandu427/turnout/edit/main/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/mandu427/turnout/blob/main/index.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
